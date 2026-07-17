@@ -27,7 +27,7 @@ function ProfilePage() {
       if (!u.user) return;
       setEmail(u.user.email ?? null);
       const { data: p } = await supabase.from("profiles").select("*").eq("id", u.user.id).single();
-      if (p) { setName(p.name ?? ""); setLevel(p.background_level ?? "beginner"); setPrefs(p.learning_preferences?.notes ?? ""); }
+      if (p) { setName(p.name ?? ""); setLevel(p.background_level ?? "beginner"); setPrefs((p.learning_preferences as any)?.notes ?? ""); }
       const { count: cc } = await supabase.from("courses").select("*", { count: "exact", head: true });
       setCourseCount(cc ?? 0);
       const { count: mc } = await supabase.from("progress").select("*", { count: "exact", head: true }).gte("mastery_score", 100);
