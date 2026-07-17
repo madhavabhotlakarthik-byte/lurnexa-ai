@@ -26,6 +26,20 @@ function CoursesList() {
       .then(({ data }) => { setCourses((data as Course[]) ?? []); setLoading(false); });
   }, []);
 
+  async function deleteCourse(e: React.MouseEvent, id: string, title: string) {
+    e.stopPropagation();
+    if (!confirm(`Delete "${title}"? This cannot be undone.`)) return;
+    const prev = courses;
+    setCourses((c) => c.filter((x) => x.id !== id));
+    const { error } = await supabase.from("courses").delete().eq("id", id);
+    if (error) {
+      setCourses(prev);
+      toast.error("Failed to delete course");
+    } else {
+      toast.success("Course deleted");
+    }
+  }
+
   return (
     <div className="min-h-screen bg-background">
       <AppNav email={email} />
