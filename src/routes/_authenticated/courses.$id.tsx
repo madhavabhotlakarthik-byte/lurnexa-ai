@@ -6,7 +6,7 @@ import { AgentTag, SectionLabel, GradientButton } from "@/components/lurnexa/pri
 import { useServerFn } from "@tanstack/react-start";
 import { askTutor } from "@/lib/agents.functions";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Send, Loader2, CheckCircle2 } from "lucide-react";
+import { Send, Loader2, CheckCircle2, Download } from "lucide-react";
 import { Markdown } from "@/components/lurnexa/markdown";
 
 export const Route = createFileRoute("/_authenticated/courses/$id")({
