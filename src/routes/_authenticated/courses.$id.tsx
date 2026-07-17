@@ -72,6 +72,13 @@ function CourseDetail() {
           <SectionLabel>Curriculum</SectionLabel>
           <h2 className="mt-3 text-2xl leading-tight">{course.title}</h2>
           {course.summary && <p className="mb-4 mt-2 text-sm text-muted-foreground">{course.summary}</p>}
+          <button
+            onClick={() => exportCoursePdf(course, modules, lessons, assessments)}
+            className="mt-3 flex w-full items-center justify-center gap-2 rounded-xl border border-[#0052FF]/30 bg-[#0052FF]/5 px-3 py-2 text-sm font-medium text-[#0052FF] transition hover:bg-[#0052FF]/10"
+          >
+            <Download className="h-4 w-4" /> Export as PDF
+          </button>
+
           <div className="mt-4 space-y-1">
             {modules.map((m, i) => {
               const mastered = (progress[m.id] ?? 0) >= 100;
