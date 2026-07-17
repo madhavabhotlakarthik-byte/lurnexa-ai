@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable";
 import { GradientButton, SectionLabel } from "@/components/lurnexa/primitives";
 import { LurnexaLogo } from "@/components/lurnexa/nav";
+import authBg from "@/assets/auth-bg.jpg";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/auth")({
@@ -54,7 +55,10 @@ function AuthPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div
+      className="relative min-h-screen bg-background bg-cover bg-center bg-no-repeat"
+      style={{ backgroundImage: `linear-gradient(to bottom, rgba(250,250,250,0.75), rgba(250,250,250,0.92)), url(${authBg})` }}
+    >
       <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
         <LurnexaLogo />
         <Link to="/" className="text-sm text-muted-foreground hover:text-foreground">← Back home</Link>
