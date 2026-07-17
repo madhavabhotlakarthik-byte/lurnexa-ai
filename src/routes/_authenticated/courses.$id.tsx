@@ -7,6 +7,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { askTutor } from "@/lib/agents.functions";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Send, Loader2, CheckCircle2 } from "lucide-react";
+import { Markdown } from "@/components/lurnexa/markdown";
 
 export const Route = createFileRoute("/_authenticated/courses/$id")({
   head: () => ({ meta: [{ title: "Course — Lurnexa" }] }),
@@ -107,9 +108,9 @@ function CourseDetail() {
                 <article className="rounded-2xl border bg-card p-8">
                   <AgentTag agent={currentLesson.generated_by_agent} />
                   <h1 className="mt-3 text-3xl leading-tight">{currentLesson.title}</h1>
-                  <div className="prose prose-slate mt-5 max-w-none whitespace-pre-wrap text-[15px] leading-relaxed">
+                  <Markdown className="prose prose-slate mt-5 max-w-none text-[15px] leading-relaxed">
                     {currentLesson.content}
-                  </div>
+                  </Markdown>
                   <div className="mt-8 flex justify-end">
                     <GradientButton onClick={() => activeModule && markMastered(activeModule)}>
                       Mark as understood
@@ -146,7 +147,7 @@ function QuizView({ quiz }: { quiz: Assessment }) {
       <div className="mt-6 space-y-6">
         {qs.map((item, i) => (
           <div key={i}>
-            <div className="font-medium">{i + 1}. {item.q}</div>
+            <div className="font-medium flex gap-2"><span>{i + 1}.</span><Markdown>{item.q}</Markdown></div>
             <div className="mt-3 space-y-2">
               {item.choices.map((c, ci) => {
                 const isChosen = answers[i] === ci;
@@ -155,7 +156,7 @@ function QuizView({ quiz }: { quiz: Assessment }) {
                 return (
                   <button key={ci} onClick={() => !checked && setAnswers((a) => ({ ...a, [i]: ci }))}
                     className={`block w-full rounded-xl border px-4 py-2.5 text-left text-sm transition ${isCorrect ? "border-emerald-500 bg-emerald-50" : isWrong ? "border-red-400 bg-red-50" : isChosen ? "border-[#0052FF] bg-[#0052FF]/5" : "hover:bg-muted"}`}>
-                    {c}
+                    <Markdown>{c}</Markdown>
                   </button>
                 );
               })}
@@ -195,7 +196,7 @@ function TutorPanel({ lesson, courseTitle }: { lesson: Lesson; courseTitle: stri
         {thread.length === 0 && <p className="text-sm text-muted-foreground">Ask a question about "{lesson.title}". The tutor guides Socratically — expect questions back.</p>}
         {thread.map((m, i) => (
           <div key={i} className={`rounded-xl px-4 py-3 text-sm ${m.role === "user" ? "ml-auto max-w-[80%] bg-gradient-accent text-white" : "max-w-[85%] bg-muted"}`}>
-            {m.text}
+            {m.role === "tutor" ? <Markdown className="prose prose-sm max-w-none">{m.text}</Markdown> : m.text}
           </div>
         ))}
         {loading && <div className="max-w-[85%] rounded-xl bg-muted px-4 py-3 text-sm text-muted-foreground"><Loader2 className="inline h-4 w-4 animate-spin" /> thinking…</div>}
