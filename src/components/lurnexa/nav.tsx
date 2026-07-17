@@ -58,9 +58,12 @@ export function AppNav({ email }: { email?: string | null }) {
           <Link to="/create" className="text-sm text-muted-foreground [&.active]:text-foreground [&.active]:font-medium">Create</Link>
           <Link to="/profile" className="text-sm text-muted-foreground [&.active]:text-foreground [&.active]:font-medium">Profile</Link>
         </div>
-        <Link to="/profile" className="grid h-9 w-9 place-items-center rounded-full bg-gradient-accent text-sm font-medium text-white">
-          {initial}
-        </Link>
+        <div className="flex items-center gap-3">
+          <ThemeToggle />
+          <Link to="/profile" className="grid h-9 w-9 place-items-center rounded-full bg-gradient-accent text-sm font-medium text-white">
+            {initial}
+          </Link>
+        </div>
       </div>
     </nav>
   );
