@@ -14,7 +14,262 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      agent_runs: {
+        Row: {
+          agent_name: string
+          completed_at: string | null
+          course_id: string
+          created_at: string
+          id: string
+          order: number
+          output_summary: string | null
+          started_at: string | null
+          status: string
+        }
+        Insert: {
+          agent_name: string
+          completed_at?: string | null
+          course_id: string
+          created_at?: string
+          id?: string
+          order?: number
+          output_summary?: string | null
+          started_at?: string | null
+          status?: string
+        }
+        Update: {
+          agent_name?: string
+          completed_at?: string | null
+          course_id?: string
+          created_at?: string
+          id?: string
+          order?: number
+          output_summary?: string | null
+          started_at?: string | null
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "agent_runs_course_id_fkey"
+            columns: ["course_id"]
+            isOneToOne: false
+            referencedRelation: "courses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      assessments: {
+        Row: {
+          content_json: Json
+          created_at: string
+          generated_by_agent: string | null
+          id: string
+          module_id: string
+          type: string
+        }
+        Insert: {
+          content_json?: Json
+          created_at?: string
+          generated_by_agent?: string | null
+          id?: string
+          module_id: string
+          type?: string
+        }
+        Update: {
+          content_json?: Json
+          created_at?: string
+          generated_by_agent?: string | null
+          id?: string
+          module_id?: string
+          type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "assessments_module_id_fkey"
+            columns: ["module_id"]
+            isOneToOne: false
+            referencedRelation: "modules"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      courses: {
+        Row: {
+          created_at: string
+          format: string | null
+          goal_prompt: string
+          id: string
+          level: string | null
+          status: string
+          summary: string | null
+          timeframe: string | null
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          format?: string | null
+          goal_prompt: string
+          id?: string
+          level?: string | null
+          status?: string
+          summary?: string | null
+          timeframe?: string | null
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          format?: string | null
+          goal_prompt?: string
+          id?: string
+          level?: string | null
+          status?: string
+          summary?: string | null
+          timeframe?: string | null
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      lessons: {
+        Row: {
+          content: string | null
+          created_at: string
+          generated_by_agent: string | null
+          id: string
+          module_id: string
+          order: number
+          status: string | null
+          title: string
+        }
+        Insert: {
+          content?: string | null
+          created_at?: string
+          generated_by_agent?: string | null
+          id?: string
+          module_id: string
+          order?: number
+          status?: string | null
+          title: string
+        }
+        Update: {
+          content?: string | null
+          created_at?: string
+          generated_by_agent?: string | null
+          id?: string
+          module_id?: string
+          order?: number
+          status?: string | null
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lessons_module_id_fkey"
+            columns: ["module_id"]
+            isOneToOne: false
+            referencedRelation: "modules"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      modules: {
+        Row: {
+          course_id: string
+          created_at: string
+          id: string
+          objective: string | null
+          order: number
+          title: string
+        }
+        Insert: {
+          course_id: string
+          created_at?: string
+          id?: string
+          objective?: string | null
+          order?: number
+          title: string
+        }
+        Update: {
+          course_id?: string
+          created_at?: string
+          id?: string
+          objective?: string | null
+          order?: number
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "modules_course_id_fkey"
+            columns: ["course_id"]
+            isOneToOne: false
+            referencedRelation: "courses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          background_level: string | null
+          created_at: string
+          id: string
+          learning_preferences: Json | null
+          name: string | null
+          updated_at: string
+        }
+        Insert: {
+          background_level?: string | null
+          created_at?: string
+          id: string
+          learning_preferences?: Json | null
+          name?: string | null
+          updated_at?: string
+        }
+        Update: {
+          background_level?: string | null
+          created_at?: string
+          id?: string
+          learning_preferences?: Json | null
+          name?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      progress: {
+        Row: {
+          id: string
+          last_activity: string
+          mastery_score: number
+          module_id: string
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          last_activity?: string
+          mastery_score?: number
+          module_id: string
+          user_id: string
+        }
+        Update: {
+          id?: string
+          last_activity?: string
+          mastery_score?: number
+          module_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "progress_module_id_fkey"
+            columns: ["module_id"]
+            isOneToOne: false
+            referencedRelation: "modules"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
