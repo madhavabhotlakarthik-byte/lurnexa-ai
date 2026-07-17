@@ -4,7 +4,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { AppNav } from "@/components/lurnexa/nav";
 import { GradientLink, SectionLabel } from "@/components/lurnexa/primitives";
 import { motion } from "framer-motion";
-import { BookOpen, Plus } from "lucide-react";
+import { BookOpen, Plus, Trash2 } from "lucide-react";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/courses/")({
   head: () => ({ meta: [{ title: "Your courses — Lurnexa" }] }),
