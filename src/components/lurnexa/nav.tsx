@@ -34,7 +34,7 @@ export function LandingNav() {
         </div>
         <div className="flex items-center gap-2">
           {authed ? (
-            <GradientLink to="/courses">Open app</GradientLink>
+            <GradientLink to="/courses">Open</GradientLink>
           ) : (
             <>
               <Link to="/auth" className="rounded-xl px-3 py-2 text-sm text-muted-foreground hover:text-foreground">Sign in</Link>
