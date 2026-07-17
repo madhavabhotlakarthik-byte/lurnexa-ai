@@ -32,6 +32,7 @@ export function LandingNav() {
           <a href="#pricing" className="text-sm text-muted-foreground hover:text-foreground">Pricing</a>
         </div>
         <div className="flex items-center gap-2">
+          <ThemeToggle />
           {authed ? (
             <GradientLink to="/courses">Open</GradientLink>
           ) : (
