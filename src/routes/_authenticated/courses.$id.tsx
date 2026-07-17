@@ -215,3 +215,90 @@ function TutorPanel({ lesson, courseTitle }: { lesson: Lesson; courseTitle: stri
     </div>
   );
 }
+
+function escapeHtml(s: string): string {
+  return s.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]!));
+}
+
+function exportCoursePdf(course: Course, modules: Module[], lessons: Lesson[], assessments: Assessment[]) {
+  const sections = modules.map((m, i) => {
+    const lesson = lessons.find((l) => l.module_id === m.id);
+    const quiz = assessments.find((a) => a.module_id === m.id);
+    const qs: Array<{ q: string; choices: string[]; answer_index: number }> = quiz?.content_json?.questions ?? [];
+    return `
+      <section class="module">
+        <div class="module-label">Module ${i + 1}</div>
+        <h2>${escapeHtml(m.title)}</h2>
+        <p class="objective"><strong>Objective:</strong> ${escapeHtml(m.objective || "")}</p>
+        ${lesson ? `<h3>${escapeHtml(lesson.title)}</h3><div class="lesson-body">${escapeHtml(lesson.content)}</div>` : ""}
+        ${qs.length ? `<h3>Practice Quiz</h3><ol class="quiz">${qs.map((item) => `
+          <li>
+            <div class="q">${escapeHtml(item.q)}</div>
+            <ul>${(item.choices || []).map((c, ci) => `<li${ci === item.answer_index ? ' class="correct"' : ""}>${escapeHtml(c)}${ci === item.answer_index ? " ✓" : ""}</li>`).join("")}</ul>
+          </li>`).join("")}</ol>` : ""}
+      </section>
+    `;
+  }).join("");
+
+  const html = `<!doctype html><html><head><meta charset="utf-8"><title>${escapeHtml(course.title)}</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+  <style>
+    body { font-family: 'Inter', -apple-system, sans-serif; max-width: 780px; margin: 40px auto; padding: 0 24px; color: #111; line-height: 1.6; }
+    h1 { font-size: 32px; margin: 0 0 8px; }
+    h2 { font-size: 22px; margin-top: 12px; border-bottom: 2px solid #0052FF; padding-bottom: 6px; }
+    h3 { font-size: 17px; margin-top: 20px; }
+    .cover { padding: 40px 0 24px; border-bottom: 1px solid #eee; margin-bottom: 24px; }
+    .cover p { color: #555; }
+    .module { page-break-inside: avoid; margin-top: 36px; }
+    .module-label { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.12em; color: #0052FF; text-transform: uppercase; }
+    .objective { color: #555; font-size: 14px; }
+    .lesson-body { white-space: pre-wrap; font-size: 14.5px; }
+    .quiz > li { margin-bottom: 14px; }
+    .quiz .q { font-weight: 600; }
+    .quiz ul { list-style: none; padding-left: 16px; }
+    .quiz li.correct { color: #059669; font-weight: 600; }
+    @media print { a { color: inherit; text-decoration: none; } }
+  </style></head><body>
+    <div class="cover">
+      <div class="module-label">Lurnexa Course</div>
+      <h1>${escapeHtml(course.title)}</h1>
+      ${course.summary ? `<p>${escapeHtml(course.summary)}</p>` : ""}
+      <p><em>Goal: ${escapeHtml(course.goal_prompt)}</em></p>
+    </div>
+    ${sections}
+    <script>
+      window.addEventListener('load', function() {
+        // Render markdown inside lesson bodies
+        document.querySelectorAll('.lesson-body').forEach(function(el){
+          if (window.marked) { el.innerHTML = window.marked.parse(el.textContent || ''); }
+        });
+        // Normalise LaTeX delimiters similar to app
+        document.querySelectorAll('.lesson-body, .quiz .q, .quiz ul li').forEach(function(el){
+          el.innerHTML = el.innerHTML
+            .replace(/\\\\\\[([\\s\\S]+?)\\\\\\]/g, '$$$$$1$$$$')
+            .replace(/\\\\\\(([\\s\\S]+?)\\\\\\)/g, '$$$1$$');
+        });
+        if (window.renderMathInElement) {
+          window.renderMathInElement(document.body, {
+            delimiters: [
+              { left: '$$', right: '$$', display: true },
+              { left: '$', right: '$', display: false },
+            ],
+            throwOnError: false,
+          });
+        }
+        setTimeout(function(){ window.print(); }, 400);
+      });
+    </script>
+  </body></html>`;
+
+  const w = window.open("", "_blank");
+  if (!w) { alert("Please allow popups to export the PDF."); return; }
+  w.document.open();
+  w.document.write(html);
+  w.document.close();
+}
+
