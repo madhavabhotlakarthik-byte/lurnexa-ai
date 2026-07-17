@@ -2,14 +2,12 @@ import { Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { GradientLink } from "./primitives";
-import { Sparkles } from "lucide-react";
+import lurnexaLogo from "@/assets/lurnexa-logo.png";
 
 export function LurnexaLogo({ className = "" }: { className?: string }) {
   return (
     <Link to="/" className={`inline-flex items-center gap-2 ${className}`}>
-      <span className="grid h-8 w-8 place-items-center rounded-lg bg-gradient-accent text-white">
-        <Sparkles className="h-4 w-4" />
-      </span>
+      <img src={lurnexaLogo} alt="Lurnexa logo" className="h-9 w-9 object-contain" />
       <span className="text-lg font-display tracking-tight">Lurnexa</span>
     </Link>
   );
