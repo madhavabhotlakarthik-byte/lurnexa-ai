@@ -4,7 +4,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { AppNav } from "@/components/lurnexa/nav";
 import { GradientLink, SectionLabel } from "@/components/lurnexa/primitives";
 import { motion } from "framer-motion";
-import { BookOpen, Plus } from "lucide-react";
+import { BookOpen, Plus, Trash2 } from "lucide-react";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/courses/")({
   head: () => ({ meta: [{ title: "Your courses — Lurnexa" }] }),
@@ -24,6 +25,20 @@ function CoursesList() {
     supabase.from("courses").select("id,title,status,summary,created_at").order("created_at", { ascending: false })
       .then(({ data }) => { setCourses((data as Course[]) ?? []); setLoading(false); });
   }, []);
+
+  async function deleteCourse(e: React.MouseEvent, id: string, title: string) {
+    e.stopPropagation();
+    if (!confirm(`Delete "${title}"? This cannot be undone.`)) return;
+    const prev = courses;
+    setCourses((c) => c.filter((x) => x.id !== id));
+    const { error } = await supabase.from("courses").delete().eq("id", id);
+    if (error) {
+      setCourses(prev);
+      toast.error("Failed to delete course");
+    } else {
+      toast.success("Course deleted");
+    }
+  }
 
   return (
     <div className="min-h-screen bg-background">
@@ -49,23 +64,34 @@ function CoursesList() {
         ) : (
           <div className="mt-10 grid gap-4 md:grid-cols-2">
             {courses.map((c, i) => (
-              <motion.button
+              <motion.div
                 key={c.id}
-                onClick={() => nav({ to: "/courses/$id", params: { id: c.id } })}
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.04 }}
-                className="group rounded-2xl border bg-card p-6 text-left transition hover:shadow-xl"
+                className="group relative rounded-2xl border bg-card p-6 transition hover:shadow-xl"
               >
-                <div className="flex items-center justify-between">
-                  <span className="font-mono text-[10px] uppercase tracking-wider text-[#0052FF]">
-                    {c.status === "ready" ? "Ready" : c.status === "generating" ? "Building…" : c.status}
-                  </span>
-                  <span className="text-xs text-muted-foreground">{new Date(c.created_at).toLocaleDateString()}</span>
-                </div>
-                <div className="mt-3 text-xl font-medium leading-snug">{c.title}</div>
-                {c.summary && <p className="mt-2 line-clamp-2 text-sm text-muted-foreground">{c.summary}</p>}
-              </motion.button>
+                <button
+                  onClick={() => nav({ to: "/courses/$id", params: { id: c.id } })}
+                  className="w-full text-left"
+                >
+                  <div className="flex items-center justify-between pr-10">
+                    <span className="font-mono text-[10px] uppercase tracking-wider text-[#0052FF]">
+                      {c.status === "ready" ? "Ready" : c.status === "generating" ? "Building…" : c.status}
+                    </span>
+                    <span className="text-xs text-muted-foreground">{new Date(c.created_at).toLocaleDateString()}</span>
+                  </div>
+                  <div className="mt-3 text-xl font-medium leading-snug">{c.title}</div>
+                  {c.summary && <p className="mt-2 line-clamp-2 text-sm text-muted-foreground">{c.summary}</p>}
+                </button>
+                <button
+                  onClick={(e) => deleteCourse(e, c.id, c.title)}
+                  aria-label="Delete course"
+                  className="absolute right-4 bottom-4 grid h-9 w-9 place-items-center rounded-lg text-muted-foreground opacity-0 transition hover:bg-destructive/10 hover:text-destructive group-hover:opacity-100"
+                >
+                  <Trash2 className="h-4 w-4" />
+                </button>
+              </motion.div>
             ))}
           </div>
         )}
