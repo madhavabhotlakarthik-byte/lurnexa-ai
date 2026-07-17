@@ -4,7 +4,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable";
 import { GradientButton, SectionLabel } from "@/components/lurnexa/primitives";
 import { LurnexaLogo } from "@/components/lurnexa/nav";
-import authBg from "@/assets/auth-bg.jpg";
+import authBgAsset from "@/assets/auth-bg-formulas.jpg.asset.json";
+const authBg = authBgAsset.url;
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/auth")({
