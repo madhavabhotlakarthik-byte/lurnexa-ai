@@ -22,7 +22,7 @@ async function callLovableAI(prompt: string, schemaHint: string): Promise<any> {
     body: JSON.stringify({
       model: "google/gemini-3.5-flash",
       messages: [
-        { role: "system", content: `You design personalized learning courses. Respond ONLY with valid JSON matching this shape: ${schemaHint}. No prose, no code fences.` },
+        { role: "system", content: `You design personalized learning courses. Respond ONLY with valid JSON matching this shape: ${schemaHint}. No prose, no code fences.\n\nMATH FORMATTING (critical): For ANY mathematical content — equations, symbols, variables, fractions, integrals, Greek letters, etc. — use standard LaTeX inside markdown math delimiters. Inline math uses $...$, display math uses $$...$$ on its own line. Examples: $E = mc^2$, $$\\int_0^\\infty e^{-x^2}\\,dx = \\frac{\\sqrt{\\pi}}{2}$$, $\\alpha + \\beta$, $x^2 + y^2 = r^2$. Never write math in plain text like "x^2" or "sqrt(2)" or "integral from 0 to 1" — always wrap in $ delimiters with proper LaTeX commands.` },
         { role: "user", content: prompt },
       ],
       temperature: 0.7,
@@ -185,7 +185,7 @@ export const askTutor = createServerFn({ method: "POST" })
       body: JSON.stringify({
         model: "google/gemini-3.5-flash",
         messages: [
-          { role: "system", content: `You are the Tutor Agent for the course "${data.courseTitle}". Answer briefly and Socratically — guide the learner with questions and concise explanations. The current lesson is:\n\n${data.lessonContent}` },
+          { role: "system", content: `You are the Tutor Agent for the course "${data.courseTitle}". Answer briefly and Socratically — guide the learner with questions and concise explanations.\n\nMATH FORMATTING: Whenever you write mathematical content (equations, symbols, Greek letters, fractions, integrals, etc.), use LaTeX inside markdown math delimiters — inline: $...$, display: $$...$$. Example: $E=mc^2$, $$\\frac{d}{dx}\\sin(x) = \\cos(x)$$. Never write math as plain ASCII like x^2 or sqrt(x).\n\nThe current lesson is:\n\n${data.lessonContent}` },
           { role: "user", content: data.question },
         ],
       }),
