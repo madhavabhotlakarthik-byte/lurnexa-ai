@@ -144,7 +144,7 @@ export const orchestrateCourse = createServerFn({ method: "POST" })
     // 4. Assessment — one quiz per module
     await setStatus("Assessment Agent", "working");
     const assessment = await callLovableAI(
-      `Course: "${course.goal_prompt}". For each module, create a 3-question multiple-choice quiz. Modules:\n${modules.map((m: any, i: number) => `${i + 1}. ${m.title}`).join("\n")}`,
+      `Course: "${course.goal_prompt}". For each module, create a multiple-choice quiz with AT LEAST 15 questions (aim for 15-20). Vary difficulty: mix easy recall, conceptual, and applied problem-solving questions. Every question must have exactly 4 choices and one correct answer_index. Modules:\n${modules.map((m: any, i: number) => `${i + 1}. ${m.title}`).join("\n")}`,
       `{"quizzes": [{"module_index": 0, "questions": [{"q": "...", "choices": ["a","b","c","d"], "answer_index": 0}]}]}`,
     );
     const quizRows = (assessment.quizzes ?? []).map((q: any) => {
