@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { GradientLink } from "./primitives";
 import lurnexaLogo from "@/assets/lurnexa-logo.png";
+import { ThemeToggle } from "./theme-toggle";
 
 export function LurnexaLogo({ className = "" }: { className?: string }) {
   return (
@@ -31,6 +32,7 @@ export function LandingNav() {
           <a href="#pricing" className="text-sm text-muted-foreground hover:text-foreground">Pricing</a>
         </div>
         <div className="flex items-center gap-2">
+          <ThemeToggle />
           {authed ? (
             <GradientLink to="/courses">Open</GradientLink>
           ) : (
@@ -56,9 +58,12 @@ export function AppNav({ email }: { email?: string | null }) {
           <Link to="/create" className="text-sm text-muted-foreground [&.active]:text-foreground [&.active]:font-medium">Create</Link>
           <Link to="/profile" className="text-sm text-muted-foreground [&.active]:text-foreground [&.active]:font-medium">Profile</Link>
         </div>
-        <Link to="/profile" className="grid h-9 w-9 place-items-center rounded-full bg-gradient-accent text-sm font-medium text-white">
-          {initial}
-        </Link>
+        <div className="flex items-center gap-3">
+          <ThemeToggle />
+          <Link to="/profile" className="grid h-9 w-9 place-items-center rounded-full bg-gradient-accent text-sm font-medium text-white">
+            {initial}
+          </Link>
+        </div>
       </div>
     </nav>
   );
