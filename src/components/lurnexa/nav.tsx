@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { GradientLink } from "./primitives";
 import lurnexaLogo from "@/assets/lurnexa-logo.png";
+import { ThemeToggle } from "./theme-toggle";
 
 export function LurnexaLogo({ className = "" }: { className?: string }) {
   return (
