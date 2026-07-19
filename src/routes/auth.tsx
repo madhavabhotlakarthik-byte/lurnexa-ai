@@ -49,10 +49,21 @@ function AuthPage() {
   };
 
   const google = async () => {
-    const result = await lovable.auth.signInWithOAuth("google", { redirect_uri: window.location.origin });
-    if (result.error) { toast.error(result.error.message); return; }
-    if (result.redirected) return;
-    navigate({ to: "/courses" });
+    try {
+      const result = await lovable.auth.signInWithOAuth("google", {
+        // Return to /auth — its useEffect checks the session and forwards to /courses.
+        redirect_uri: `${window.location.origin}/auth`,
+        extraParams: { prompt: "select_account" },
+      });
+      if (result.error) { toast.error(result.error.message); return; }
+      if (result.redirected) return; // full-page redirect to Google in progress
+      // Popup flow: helper already set the session — verify with the auth server.
+      const { data } = await supabase.auth.getUser();
+      if (data.user) navigate({ to: "/courses" });
+      else toast.error("Sign-in was not completed. Please try again.");
+    } catch (err: any) {
+      toast.error(err?.message ?? "Google sign-in failed");
+    }
   };
 
   return (
