@@ -200,40 +200,35 @@ function Landing() {
         </div>
       </section>
 
-      {/* PRICING */}
+      {/* PRICING — free for students */}
       <section id="pricing" className="mx-auto max-w-6xl px-6 py-24">
-        <div className="mx-auto max-w-2xl text-center">
+        <div className="mx-auto max-w-3xl text-center">
           <SectionLabel>Pricing</SectionLabel>
-          <h2 className="mt-5 text-4xl tracking-tight md:text-5xl">Simple, honest pricing.</h2>
-        </div>
-        <div className="mx-auto mt-14 grid max-w-4xl gap-6 md:grid-cols-2">
-          {[
-            { name: "Free", price: "$0", features: ["1 active course", "All 5 agents", "Basic progress tracking"] },
-            { name: "Pro", price: "$12", features: ["Unlimited courses", "Priority orchestration", "Deep tutor conversations", "Export & share"], featured: true },
-          ].map((p) => (
-            <div key={p.name} className={`relative rounded-2xl border bg-card p-8 ${p.featured ? "shadow-2xl ring-2 ring-[#0052FF]/40" : ""}`}>
-              {p.featured && (
-                <div className="absolute -top-3 left-8 rounded-full bg-gradient-accent px-3 py-1 font-mono text-[10px] uppercase tracking-wider text-white">Popular</div>
-              )}
-              <div className="font-mono text-xs uppercase tracking-wider text-muted-foreground">{p.name}</div>
-              <div className="mt-2 flex items-baseline gap-1">
-                <span className="text-4xl font-display">{p.price}</span>
-                <span className="text-sm text-muted-foreground">/month</span>
-              </div>
-              <ul className="mt-6 space-y-3">
-                {p.features.map((f) => (
-                  <li key={f} className="flex items-start gap-2 text-sm">
-                    <Check className="mt-0.5 h-4 w-4 text-[#0052FF]" /> {f}
-                  </li>
-                ))}
-              </ul>
-              <div className="mt-8">
-                <Link to="/auth" className={`block w-full rounded-xl px-4 py-3 text-center text-sm font-medium ${p.featured ? "bg-gradient-accent text-white" : "border"}`}>
-                  Get started
-                </Link>
-              </div>
+          <h2 className="mt-5 text-4xl tracking-tight md:text-5xl">
+            Free for <span className="text-gradient-accent">all students</span>.
+          </h2>
+          <p className="mt-5 text-lg text-muted-foreground">
+            Every agent, every course, every feature — no credit card, no paywall. Learning should never be gated.
+          </p>
+          <div className="mx-auto mt-10 max-w-md rounded-2xl border bg-card p-8 shadow-xl ring-2 ring-[#0052FF]/30">
+            <div className="font-mono text-xs uppercase tracking-wider text-muted-foreground">Student plan</div>
+            <div className="mt-2 flex items-baseline justify-center gap-1">
+              <span className="text-5xl font-display">$0</span>
+              <span className="text-sm text-muted-foreground">/ forever</span>
             </div>
-          ))}
+            <ul className="mt-6 space-y-3 text-left">
+              {["Unlimited courses", "All 5 specialist agents", "Deep tutor conversations", "Progress tracking & export"].map((f) => (
+                <li key={f} className="flex items-start gap-2 text-sm">
+                  <Check className="mt-0.5 h-4 w-4 text-[#0052FF]" /> {f}
+                </li>
+              ))}
+            </ul>
+            <div className="mt-8">
+              <Link to="/auth" className="block w-full rounded-xl bg-gradient-accent px-4 py-3 text-center text-sm font-medium text-white">
+                Get started free
+              </Link>
+            </div>
+          </div>
         </div>
       </section>
 
