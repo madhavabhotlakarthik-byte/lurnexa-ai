@@ -64,7 +64,7 @@ function DashboardPage() {
 
   // Streak (based on distinct progress dates)
   const streak = useMemo(() => {
-    const days = new Set(progress.map((p) => new Date(p.updated_at).toDateString()));
+    const days = new Set(progress.map((p) => new Date(p.last_activity).toDateString()));
     let s = 0;
     const d = new Date();
     while (days.has(d.toDateString())) {
@@ -83,7 +83,7 @@ function DashboardPage() {
       const key = d.toDateString();
       arr.push({
         day: d.toLocaleDateString(undefined, { month: "short", day: "numeric" }),
-        lessons: progress.filter((p) => new Date(p.updated_at).toDateString() === key).length,
+        lessons: progress.filter((p) => new Date(p.last_activity).toDateString() === key).length,
         courses: courses.filter((c) => new Date(c.created_at).toDateString() === key).length,
       });
     }
@@ -94,7 +94,7 @@ function DashboardPage() {
   const heatmap = useMemo(() => {
     const days = new Map<string, number>();
     progress.forEach((p) => {
-      const k = new Date(p.updated_at).toDateString();
+      const k = new Date(p.last_activity).toDateString();
       days.set(k, (days.get(k) ?? 0) + 1);
     });
     const cells: { date: Date; count: number }[] = [];
@@ -110,11 +110,11 @@ function DashboardPage() {
   const agentStats = useMemo(() => {
     const map = new Map<string, { agent: string; runs: number; avgMs: number; total: number }>();
     runs.forEach((r) => {
-      const s = map.get(r.agent) ?? { agent: r.agent, runs: 0, avgMs: 0, total: 0 };
+      const s = map.get(r.agent_name) ?? { agent: r.agent_name, runs: 0, avgMs: 0, total: 0 };
       s.runs += 1;
-      s.total += r.duration_ms ?? 0;
+      s.total += (r.completed_at && r.started_at ? new Date(r.completed_at).getTime() - new Date(r.started_at).getTime() : 0) ?? 0;
       s.avgMs = Math.round(s.total / s.runs);
-      map.set(r.agent, s);
+      map.set(r.agent_name, s);
     });
     return Array.from(map.values());
   }, [runs]);
