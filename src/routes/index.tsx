@@ -114,14 +114,13 @@ function Landing() {
         </div>
       </section>
 
-      {/* HOW — inverted */}
-      <section id="how" className="relative bg-foreground text-background">
-        <div className="absolute inset-0 dot-pattern opacity-70" />
+      {/* HOW */}
+      <section id="how" className="relative bg-background">
         <div className="relative mx-auto max-w-6xl px-6 py-24">
           <div className="max-w-2xl">
             <SectionLabel>The process</SectionLabel>
             <h2 className="mt-5 text-4xl tracking-tight md:text-5xl">Watch your course build itself.</h2>
-            <p className="mt-4 text-white/70">No spinners hiding the work. Every agent's step is visible so you know exactly what's happening.</p>
+            <p className="mt-4 text-muted-foreground">No spinners hiding the work. Every agent's step is visible so you know exactly what's happening.</p>
           </div>
           <div className="mt-14 grid gap-6 md:grid-cols-4">
             {STEPS.map((s, i) => (
@@ -131,13 +130,13 @@ function Landing() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.08 }}
-                className="relative rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur"
+                className="relative rounded-2xl border bg-card p-6 shadow-sm"
               >
-                <div className="mb-4 grid h-9 w-9 place-items-center rounded-lg bg-gradient-accent font-mono text-sm">{i + 1}</div>
+                <div className="mb-4 grid h-9 w-9 place-items-center rounded-lg bg-gradient-accent font-mono text-sm text-white">{i + 1}</div>
                 <div className="text-lg font-medium">{s.title}</div>
-                <p className="mt-2 text-sm text-white/60">{s.body}</p>
+                <p className="mt-2 text-sm text-muted-foreground">{s.body}</p>
                 {i < STEPS.length - 1 && (
-                  <ArrowRight className="absolute -right-4 top-1/2 hidden h-5 w-5 -translate-y-1/2 text-[#4D7CFF] md:block" />
+                  <ArrowRight className="absolute -right-4 top-1/2 hidden h-5 w-5 -translate-y-1/2 text-[#0052FF] md:block" />
                 )}
               </motion.div>
             ))}
