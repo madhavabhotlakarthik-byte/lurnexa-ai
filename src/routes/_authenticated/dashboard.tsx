@@ -26,8 +26,8 @@ export const Route = createFileRoute("/_authenticated/dashboard")({
 });
 
 type Course = { id: string; title: string; status: string; created_at: string };
-type Progress = { id: string; mastery_score: number | null; updated_at: string; lesson_id: string | null };
-type AgentRun = { id: string; agent: string; status: string; created_at: string; duration_ms: number | null };
+type Progress = { id: string; mastery_score: number | null; last_activity: string; module_id: string | null };
+type AgentRun = { id: string; agent_name: string; status: string; created_at: string; started_at: string | null; completed_at: string | null };
 
 const COLORS = ["#0052FF", "#3B82F6", "#60A5FA", "#93C5FD", "#BFDBFE", "#DBEAFE"];
 
@@ -44,12 +44,12 @@ function DashboardPage() {
       setEmail(u.user?.email ?? null);
       const [c, p, r] = await Promise.all([
         supabase.from("courses").select("id,title,status,created_at").order("created_at", { ascending: false }),
-        supabase.from("progress").select("id,mastery_score,updated_at,lesson_id").order("updated_at", { ascending: false }),
-        supabase.from("agent_runs").select("id,agent,status,created_at,duration_ms").order("created_at", { ascending: false }).limit(200),
+        supabase.from("progress").select("id,mastery_score,last_activity,module_id").order("last_activity", { ascending: false }),
+        supabase.from("agent_runs").select("id,agent_name,status,created_at,started_at,completed_at").order("created_at", { ascending: false }).limit(200),
       ]);
-      setCourses((c.data as Course[]) ?? []);
-      setProgress((p.data as Progress[]) ?? []);
-      setRuns((r.data as AgentRun[]) ?? []);
+      setCourses((c.data as unknown as Course[]) ?? []);
+      setProgress((p.data as unknown as Progress[]) ?? []);
+      setRuns((r.data as unknown as AgentRun[]) ?? []);
       setLoading(false);
     })();
   }, []);
