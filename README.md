@@ -1,3 +1,15 @@
+EASY JUST CLICK THE LINK TO CHECK : lurnexa-web.lovable.app
+
+
+
+
+
+
+
+
+
+
+
 # Lurnexa — Learning, Reimagined by AI Agents
 
 Lurnexa is a full-stack web platform where you type a single learning goal and a team of specialized AI agents (Curriculum, Content, Assessment, Tutor, Media) collaborate to generate a complete, personalized learning experience.
