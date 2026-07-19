@@ -36,7 +36,10 @@ async function callLovableAI(prompt: string, schemaHint: string): Promise<any> {
   const data = await res.json();
   const raw = data.choices?.[0]?.message?.content ?? "{}";
   const cleaned = raw.replace(/^```json\s*/i, "").replace(/```$/g, "").trim();
-  try { return JSON.parse(cleaned); } catch { return JSON.parse(cleaned.match(/\{[\s\S]*\}/)?.[0] ?? "{}"); }
+  // Escape invalid backslash escapes (LaTeX like \int, \frac, \sqrt) so JSON.parse succeeds.
+  const sanitize = (s: string) => s.replace(/\\(?!["\\/bfnrtu])/g, "\\\\");
+  const tryParse = (s: string) => { try { return JSON.parse(s); } catch { return JSON.parse(sanitize(s)); } };
+  try { return tryParse(cleaned); } catch { return tryParse(cleaned.match(/\{[\s\S]*\}/)?.[0] ?? "{}"); }
 }
 
 export const createCourse = createServerFn({ method: "POST" })
