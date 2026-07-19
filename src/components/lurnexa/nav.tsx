@@ -54,6 +54,7 @@ export function AppNav({ email }: { email?: string | null }) {
       <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-3">
         <LurnexaLogo />
         <div className="hidden items-center gap-6 md:flex">
+          <Link to="/dashboard" className="text-sm text-muted-foreground [&.active]:text-foreground [&.active]:font-medium">Dashboard</Link>
           <Link to="/courses" className="text-sm text-muted-foreground [&.active]:text-foreground [&.active]:font-medium" activeOptions={{ exact: false }}>Courses</Link>
           <Link to="/create" className="text-sm text-muted-foreground [&.active]:text-foreground [&.active]:font-medium">Create</Link>
           <Link to="/profile" className="text-sm text-muted-foreground [&.active]:text-foreground [&.active]:font-medium">Profile</Link>
