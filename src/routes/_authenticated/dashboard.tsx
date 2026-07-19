@@ -112,7 +112,7 @@ function DashboardPage() {
     runs.forEach((r) => {
       const s = map.get(r.agent_name) ?? { agent: r.agent_name, runs: 0, avgMs: 0, total: 0 };
       s.runs += 1;
-      s.total += (r.completed_at && r.started_at ? new Date(r.completed_at).getTime() - new Date(r.started_at).getTime() : 0) ?? 0;
+      s.total += r.completed_at && r.started_at ? new Date(r.completed_at).getTime() - new Date(r.started_at).getTime() : 0;
       s.avgMs = Math.round(s.total / s.runs);
       map.set(r.agent_name, s);
     });
